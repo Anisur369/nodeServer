@@ -8,12 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-Clint-site/node_modules
-Server-site/node_modules
-Server-site/node_modules
 dist
-Clint-site/dist
-Server-site/dist
 dist-ssr
 *.local
 
