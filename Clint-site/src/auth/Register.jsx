@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router";
 
 function Register() {
-  const { createUser } = useContext(AuthContext);
-  // const { createUser } = use(AuthContext);
+  const { createUser } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -15,6 +14,15 @@ function Register() {
 
   const handleRegistration = (data) => {
     const { name, email, password } = data;
+    const imageFile = data.photo[0];
+    createUser(email, password, name, imageFile)
+      .then((result) => {
+        const createdUser = result;
+        console.log("User created:", createdUser);
+      })
+      .catch((error) => {
+        console.error("Error during registration:", error);
+      });
   };
 
   return (
@@ -26,9 +34,19 @@ function Register() {
             {...register("name", { required: true })}
             type="text"
             className="input"
-            placeholder="Name"
+            placeholder="Your Name"
           />
           {errors.name && (
+            <b className="error text-[#ff0000]">*This field is required*</b>
+          )}
+          <label className="label">Photo</label>
+          <input
+            {...register("photo", { required: true })}
+            type="file"
+            className="file-input"
+            placeholder="Your Photo"
+          />
+          {errors.photo && (
             <b className="error text-[#ff0000]">*This field is required*</b>
           )}
           <label className="label">Email</label>
@@ -61,8 +79,21 @@ function Register() {
               *Password must be at least 6 characters*
             </b>
           )}
+          {errors.password?.type === "maxLength" && (
+            <b className="error text-[#ff0000]">
+              *Password must be less than 20 characters*
+            </b>
+          )}
+          {errors.password?.type === "pattern" && (
+            <b className="error text-[#ff0000]">
+              *Password must have one uppercase letter, one number and one
+              special character*
+            </b>
+          )}
           <div>
-            <a className="link link-hover">Forgot password?</a>
+            <Link to="/forgot-password" className="link link-hover">
+              Forgot password?
+            </Link>
           </div>
           <button className="btn btn-neutral mt-4">Register</button>
           <span className="text-sm mt-2">

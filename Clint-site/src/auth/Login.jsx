@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 function Login() {
+  const { signInUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -10,7 +12,15 @@ function Login() {
   } = useForm();
 
   const handleRegistration = (data) => {
-    console.log(data);
+    const { email, password } = data;
+    signInUser(email, password)
+      .then((result) => {
+        const loggedInUser = result.user;
+        console.log(loggedInUser);
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+      });
   };
 
   return (
