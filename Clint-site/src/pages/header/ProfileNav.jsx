@@ -1,4 +1,9 @@
+import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router";
+
 function ProfileNav() {
+  const { user, signOutUser } = useAuth();
+
   return (
     <div className="dropdown dropdown-end">
       <div
@@ -9,7 +14,7 @@ function ProfileNav() {
         <div className="w-10 rounded-full">
           <img
             alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+            src={user?.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
           />
         </div>
       </div>
@@ -17,6 +22,10 @@ function ProfileNav() {
         tabIndex="-1"
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
       >
+        <span className="mx-auto">
+          <b className="text-[18px]">{user?.displayName}</b>
+        </span>
+        <hr />
         <li>
           <a className="justify-between">
             Profile
@@ -27,7 +36,9 @@ function ProfileNav() {
           <a>Settings</a>
         </li>
         <li>
-          <a>Logout</a>
+          <button onClick={() => signOutUser()} className="link link-hover">
+            Logout
+          </button>
         </li>
       </ul>
     </div>

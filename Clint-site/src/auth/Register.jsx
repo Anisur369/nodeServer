@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 
 function Register() {
   const { createUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -19,6 +21,7 @@ function Register() {
       .then((result) => {
         const createdUser = result;
         console.log("User created:", createdUser);
+        navigate(location.state?.from?.pathname || "/");
       })
       .catch((error) => {
         console.error("Error during registration:", error);
@@ -95,10 +98,16 @@ function Register() {
               Forgot password?
             </Link>
           </div>
-          <button className="btn btn-neutral mt-4">Register</button>
+          <button type="submit" className="btn btn-neutral mt-4">
+            Register
+          </button>
           <span className="text-sm mt-2">
             already have an account?
-            <Link to="/login" className="link link-hover text-blue-500">
+            <Link
+              state={location.state}
+              to="/login"
+              className="link link-hover text-blue-500"
+            >
               <b> Login</b>
             </Link>
           </span>

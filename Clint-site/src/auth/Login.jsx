@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
 function Login() {
   const { signInUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,7 +18,8 @@ function Login() {
     signInUser(email, password)
       .then((result) => {
         const loggedInUser = result.user;
-        console.log(loggedInUser);
+        // console.log(loggedInUser);
+        navigate(location.state?.from?.pathname || "/");
       })
       .catch((error) => {
         console.error("Error during login:", error);
@@ -60,10 +63,16 @@ function Login() {
           <div>
             <a className="link link-hover">Forgot password?</a>
           </div>
-          <button className="btn btn-neutral mt-4">Login</button>
+          <button type="submit" className="btn btn-neutral mt-4">
+            Login
+          </button>
           <span className="text-sm mt-2">
             Don't have an account?
-            <Link to="/register" className="link link-hover text-blue-500">
+            <Link
+              state={location.state}
+              to="/register"
+              className="link link-hover text-blue-500"
+            >
               <b> Register</b>
             </Link>
           </span>
